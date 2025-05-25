@@ -6,5 +6,8 @@
     CompatiblePSEditions = @("Core")
     PowerShellVersion = "3.0"
     RootModule = "Darbot.NLWeb.psm1"
-    FunctionsToExport = @()
+    FunctionsToExport = @(
+        "Get-NLWebContent",
+        "Test-NLWebConnection"
+    )
 }

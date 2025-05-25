@@ -6,5 +6,8 @@
     CompatiblePSEditions = @("Core")
     PowerShellVersion = "3.0"
     RootModule = "Darbot.MCP.psm1"
-    FunctionsToExport = @()
+    FunctionsToExport = @(
+        "Get-MCPInfo",
+        "Invoke-MCPCommand"
+    )
 }
