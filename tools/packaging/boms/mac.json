@@ -2218,5 +2218,21 @@
   {
     "Pattern": "System.Management.Automation.dll",
     "FileType": "Product"
+  },
+  {
+    "Pattern": "Modules/Darbot.MCP/.*.psd1",
+    "FileType": "Product"
+  },
+  {
+    "Pattern": "Modules/Darbot.MCP/.*.psm1",
+    "FileType": "Product"
+  },
+  {
+    "Pattern": "Modules/Darbot.NLWeb/.*.psd1",
+    "FileType": "Product"
+  },
+  {
+    "Pattern": "Modules/Darbot.NLWeb/.*.psm1",
+    "FileType": "Product"
   }
 ]

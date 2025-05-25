@@ -2378,14 +2378,18 @@ function New-ILNugetPackageSource
             "Microsoft.PowerShell.Security",
             "Microsoft.PowerShell.Utility",
             "Microsoft.WSMan.Management",
-            "PSDiagnostics"
+            "PSDiagnostics",
+            "Darbot.MCP",
+            "Darbot.NLWeb"
         )
 
         $unixBuiltInModules = @(
             "Microsoft.PowerShell.Host",
             "Microsoft.PowerShell.Management",
             "Microsoft.PowerShell.Security",
-            "Microsoft.PowerShell.Utility"
+            "Microsoft.PowerShell.Utility",
+            "Darbot.MCP",
+            "Darbot.NLWeb"
         )
 
         $winModuleFolder = New-Item (Join-Path $contentFolder "runtimes\win\lib\$script:netCoreRuntime\Modules") -ItemType Directory -Force
