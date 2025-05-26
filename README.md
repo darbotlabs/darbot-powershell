@@ -76,6 +76,34 @@ There are dozens of topic-specific channels on our community-driven PowerShell V
 [cf-site]: https://www.codefactor.io/repository/github/powershell/powershell
 [cf-image]: https://www.codefactor.io/repository/github/powershell/powershell/badge
 
+## 🚀 Automation & Development
+
+This repository includes comprehensive automation for development workflows:
+
+### Quick Start
+```bash
+# Bootstrap the environment
+npm run bootstrap
+
+# Build PowerShell
+npm run build
+
+# Run tests
+npm run test
+
+# Lint code
+npm run lint
+```
+
+### Features
+- **Cross-platform CI/CD** with GitHub Actions
+- **Automated dependency management** via Dependabot
+- **Code quality enforcement** with PSScriptAnalyzer
+- **npm scripts** for consistent build commands
+- **Enhanced issue/PR templates** for better collaboration
+
+📖 **[Full Automation Guide](docs/darbot/AUTOMATION_GUIDE.md)** - Complete setup and usage documentation
+
 ## Developing and Contributing
 
 Want to contribute to PowerShell? Please start with the [Contribution Guide][] to learn how to develop and contribute.

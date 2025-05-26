@@ -1,0 +1,40 @@
+{
+  "name": "darbot-powershell",
+  "version": "7.5.1",
+  "description": "PowerShell for every system - Darbot Labs Edition",
+  "scripts": {
+    "bootstrap": "pwsh -Command \"Import-Module './build.psm1'; Start-PSBootstrap\"",
+    "build": "pwsh -Command \"Import-Module './build.psm1'; Start-PSBuild\"",
+    "build:clean": "pwsh -Command \"Import-Module './build.psm1'; Start-PSBuild -Clean\"",
+    "package": "pwsh -Command \"Import-Module './build.psm1'; Start-PSPackage\"",
+    "test": "pwsh -Command \"Import-Module './build.psm1'; Start-PSPester\"",
+    "test:ci": "pwsh -Command \"Invoke-Pester -CI\"",
+    "lint": "pwsh -Command \"Invoke-ScriptAnalyzer -Path . -Recurse -Settings PSGallery\"",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PowerShell/PowerShell.git"
+  },
+  "keywords": [
+    "powershell",
+    "shell",
+    "cli",
+    "automation",
+    "scripting",
+    "cross-platform"
+  ],
+  "author": "Darbot Labs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PowerShell/PowerShell/issues"
+  },
+  "homepage": "https://github.com/PowerShell/PowerShell#readme",
+  "devDependencies": {
+    "markdown-link-check": "^3.11.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

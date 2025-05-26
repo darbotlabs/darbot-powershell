@@ -1,0 +1,122 @@
+name: PowerShell CI
+
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main, develop ]
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  POWERSHELL_TELEMETRY_OPTOUT: 1
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Bootstrap PowerShell (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        Import-Module './build.psm1'
+        Start-PSBootstrap
+
+    - name: Bootstrap PowerShell (Unix)
+      if: matrix.os != 'windows-latest'
+      shell: pwsh
+      run: |
+        Import-Module './build.psm1'
+        Start-PSBootstrap
+
+    - name: Build PowerShell
+      shell: pwsh
+      run: |
+        Import-Module './build.psm1'
+        Start-PSBuild
+
+    - name: Run Pester Tests
+      shell: pwsh
+      run: |
+        Import-Module './build.psm1'
+        $testResults = Start-PSPester -PassThru
+        if ($testResults.FailedCount -gt 0) {
+          throw "$($testResults.FailedCount) tests failed"
+        }
+
+    - name: Run PSScriptAnalyzer
+      shell: pwsh
+      run: |
+        if (Get-Module -ListAvailable PSScriptAnalyzer) {
+          $results = Invoke-ScriptAnalyzer -Path . -Recurse -Settings PSGallery
+          if ($results) {
+            $results | ForEach-Object { Write-Output "::error file=$($_.ScriptName),line=$($_.Line)::$($_.Message)" }
+            throw "PSScriptAnalyzer found $($results.Count) issues"
+          }
+        } else {
+          Write-Warning "PSScriptAnalyzer not available, skipping lint check"
+        }
+
+    - name: Package PowerShell
+      if: matrix.os == 'ubuntu-latest'
+      shell: pwsh
+      run: |
+        Import-Module './build.psm1'
+        Start-PSPackage
+
+    - name: Upload Build Artifacts
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: powershell-packages
+        path: |
+          **/pwsh*
+          **/*.tar.gz
+          **/*.zip
+        retention-days: 30
+
+  code-coverage:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Bootstrap PowerShell
+      shell: pwsh
+      run: |
+        Import-Module './build.psm1'
+        Start-PSBootstrap
+
+    - name: Run Tests with Coverage
+      shell: pwsh
+      run: |
+        Import-Module './build.psm1'
+        Start-PSPester -CodeCoverage
+
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./coverage.xml
+        fail_ci_if_error: false
+        verbose: true

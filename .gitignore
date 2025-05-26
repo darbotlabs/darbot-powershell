@@ -118,3 +118,5 @@ tmp/*
 
 # Ignore CTRF report files
 crtf/*
+
+.fake

@@ -14,3 +14,21 @@ updates:
       interval: daily
     labels:
       - "CL-BuildPackaging"
+  
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "CL-BuildPackaging"
+    target-branch: "master"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "CL-BuildPackaging"
+    target-branch: "master"
