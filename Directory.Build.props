@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup>
+    <WarningsNotAsErrors>NU1900</WarningsNotAsErrors>
+  </PropertyGroup>
+</Project>

@@ -38,7 +38,31 @@ npm run package
 # Run all tests
 npm run test
 
-# Run tests in CI mode
+# Run tests iPS G:\Github\new\UI Tars and Omniparser> 
+PS G:\Github\new\UI Tars and Omniparser> 
+PS G:\Github\new\UI Tars and Omniparser> npm install
+
+> postinstall
+> cd UI-Tars/Desktop && pnpm install
+
+Scope: all 12 workspace projects
+Lockfile is up to date, resolution step is skipped
+Packages: -143
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Progress: resolved 0, reused 135, downloaded 0, added 0, done
+. prepare$ husky && husky install
+│ Usage:
+│   husky install [dir] (default: .husky)
+│   husky uninstall
+│   husky set|add <file> [cmd]
+│ husky - .git can't be found (see https://typicode.github.io/husky/#/?id=custom-directory)
+└─ Failed in 114ms at G:\Github\new\UI Tars and Omniparser\UI-Tars\Desktop
+ ELIFECYCLE  Command failed with exit code 1.
+npm error code 1
+npm error path G:\Github\new\UI Tars and Omniparser
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c cd UI-Tars/Desktop && pnpm install
+npm error A complete log of this run can be founn CI mode
 npm run test:ci
 
 # Lint code with PSScriptAnalyzer

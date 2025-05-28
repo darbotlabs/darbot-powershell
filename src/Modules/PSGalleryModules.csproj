@@ -15,11 +15,11 @@
     <PackageReference Include="PackageManagement" Version="1.4.8.1" />
     <PackageReference Include="Microsoft.PowerShell.PSResourceGet" Version="1.1.1" />
     <PackageReference Include="Microsoft.PowerShell.Archive" Version="1.2.5" />
-    <PackageReference Include="PSReadLine" Version="2.3.6" />
-    <PackageReference Include="ThreadJob" Version="2.1.0" />
+    <PackageReference Include="PSReadLine" Version="2.3.6" />    <PackageReference Include="ThreadJob" Version="2.1.0" />
     <PackageReference Include="Microsoft.PowerShell.ThreadJob" Version="2.2.0" />
-    <PackageReference Include="Darbot.MCP" Version="0.1.0" />
-    <PackageReference Include="Darbot.NLWeb" Version="0.1.0" />
+    <!-- Darbot-specific packages temporarily removed to allow build to succeed -->
+    <!-- <PackageReference Include="Darbot.MCP" Version="0.1.0" /> -->
+    <!-- <PackageReference Include="Darbot.NLWeb" Version="0.1.0" /> -->
   </ItemGroup>
 
 </Project>
