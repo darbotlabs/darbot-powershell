@@ -104,6 +104,95 @@ npm run lint
 
 📖 **[Full Automation Guide](docs/darbot/AUTOMATION_GUIDE.md)** - Complete setup and usage documentation
 
+## 🤖 Model Context Protocol (MCP) Integration
+
+PowerShell now includes comprehensive **Model Context Protocol (MCP)** support, enabling seamless integration with AI assistants like GitHub Copilot, Claude, and other MCP-compatible tools.
+
+### Key Features
+
+- **🌐 HTTP MCP Server**: Local server implementing MCP JSON-RPC 2.0 protocol
+- **🔧 PowerShell Execution**: Run PowerShell commands remotely via AI assistants  
+- **🛡️ Security**: Localhost-only connections, respects PowerShell execution policies
+- **📊 Structured Responses**: JSON-formatted output with error handling
+- **⚡ Real-time Processing**: Asynchronous request handling with timeout support
+
+### Quick Start
+
+```powershell
+# Import the MCP module
+Import-Module Darbot.MCP
+
+# Start MCP server (default port 8080)
+Start-MCPServer
+
+# Check server status
+Get-MCPInfo
+# Output: MCPServerStatus: Running, MCPServerPort: 8080
+
+# Execute PowerShell remotely
+Invoke-MCPScript -Script "Get-Process | Select-Object -First 5"
+
+# Stop server when done
+Stop-MCPServer
+```
+
+### GitHub Copilot Integration
+
+Configure VS Code to use PowerShell via MCP by adding to your settings:
+
+```json
+{
+  "github.copilot.chat.mcp.servers": {
+    "darbot-powershell": {
+      "uri": "http://localhost:8080"
+    }
+  }
+}
+```
+
+Then use natural language commands:
+- *"Use darbot-powershell to get system information"*
+- *"Use darbot-powershell to list top 5 processes by CPU usage"*  
+- *"Use darbot-powershell to check disk space"*
+
+### Available Cmdlets
+
+| Cmdlet | Description |
+|--------|-------------|
+| `Start-MCPServer` | Starts MCP server on specified port |
+| `Stop-MCPServer` | Stops running MCP server |
+| `Get-MCPInfo` | Shows server status and system information |
+| `Invoke-MCPScript` | Executes PowerShell with timeout/error handling |
+| `Invoke-MCPServerRequest` | Processes MCP requests (for testing) |
+
+### Example MCP Protocol Messages
+
+**Tools List Request:**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list"
+}
+```
+
+**PowerShell Execution Request:**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "run_powershell",
+    "arguments": {
+      "command": "Get-Date"
+    }
+  }
+}
+```
+
+📖 **[MCP Usage Examples](Examples/MCP-Usage.md)** - Complete usage guide and examples
+
 ## Developing and Contributing
 
 Want to contribute to PowerShell? Please start with the [Contribution Guide][] to learn how to develop and contribute.

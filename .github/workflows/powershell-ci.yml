@@ -26,7 +26,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: |
+          8.0.x
+          10.0.100-preview.3.25201.16
+        dotnet-quality: 'preview'
 
     - name: Bootstrap PowerShell (Windows)
       if: matrix.os == 'windows-latest'
@@ -100,7 +103,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: |
+          8.0.x
+          10.0.100-preview.3.25201.16
+        dotnet-quality: 'preview'
 
     - name: Bootstrap PowerShell
       shell: pwsh
