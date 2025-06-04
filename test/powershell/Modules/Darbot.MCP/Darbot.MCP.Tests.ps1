@@ -1,4 +1,13 @@
 Describe "Darbot.MCP module" -Tags "CI" {
+    BeforeAll {
+        # Import the Darbot.MCP module
+        if ($IsWindows) {
+            Import-Module "$PSScriptRoot/../../../../src/Modules/Windows/Darbot.MCP/Darbot.MCP.psd1" -Force
+        } else {
+            Import-Module "$PSScriptRoot/../../../../src/Modules/Unix/Darbot.MCP/Darbot.MCP.psd1" -Force
+        }
+    }
+
     It "Get-MCPInfo returns environment info" {
         $info = Get-MCPInfo
         $info | Should -BeOfType psobject

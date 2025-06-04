@@ -81,6 +81,7 @@ There are dozens of topic-specific channels on our community-driven PowerShell V
 This repository includes comprehensive automation for development workflows:
 
 ### Quick Start
+
 ```bash
 # Bootstrap the environment
 npm run bootstrap
@@ -96,6 +97,7 @@ npm run lint
 ```
 
 ### Features
+
 - **Cross-platform CI/CD** with GitHub Actions
 - **Automated dependency management** via Dependabot
 - **Code quality enforcement** with PSScriptAnalyzer
@@ -151,6 +153,7 @@ Configure VS Code to use PowerShell via MCP by adding to your settings:
 ```
 
 Then use natural language commands:
+
 - *"Use darbot-powershell to get system information"*
 - *"Use darbot-powershell to list top 5 processes by CPU usage"*  
 - *"Use darbot-powershell to check disk space"*
@@ -168,6 +171,7 @@ Then use natural language commands:
 ### Example MCP Protocol Messages
 
 **Tools List Request:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -177,6 +181,7 @@ Then use natural language commands:
 ```
 
 **PowerShell Execution Request:**
+
 ```json
 {
   "jsonrpc": "2.0",

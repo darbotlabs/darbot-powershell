@@ -1,12 +1,14 @@
 # Example: Using Darbot.MCP with GitHub Copilot
 
 ## Overview
+
 This example demonstrates how to use the Darbot.MCP module to expose PowerShell functionality to GitHub Copilot via the Model Context Protocol (MCP).
 
 ## Prerequisites
+
 1. PowerShell 7.0 or later
-2. Visual Studio Code with GitHub Copilot extension
-3. Darbot.MCP module loaded
+1. Visual Studio Code with GitHub Copilot extension
+1. Darbot.MCP module loaded
 
 ## Setup
 
@@ -27,6 +29,7 @@ Start-MCPServer -Port 8085
 ## Basic Usage
 
 ### 1. Start MCP Server
+
 ```powershell
 PS> Start-MCPServer -Port 8080
 Starting MCP Server on port 8080...
@@ -35,6 +38,7 @@ Note: Use Stop-MCPServer to stop the server
 ```
 
 ### 2. Configure GitHub Copilot (VS Code)
+
 In VS Code settings.json, add the MCP server configuration:
 
 ```json
@@ -54,6 +58,7 @@ In VS Code settings.json, add the MCP server configuration:
 Once configured, you can ask GitHub Copilot to use PowerShell commands:
 
 **Example Copilot prompts:**
+
 - "Use darbot-powershell to get the current date and time"
 - "Use darbot-powershell to list the top 5 processes by CPU usage"
 - "Use darbot-powershell to get system information"
@@ -66,14 +71,16 @@ The MCP server will execute these PowerShell commands and return the results to 
 The Darbot.MCP server exposes the following tools to AI assistants:
 
 ### run_powershell
+
 - **Name**: `run_powershell`
 - **Description**: Execute PowerShell commands and scripts
-- **Input**: 
-  - `command` (string): PowerShell command or script to execute
+- **Input**:
+    - `command` (string): PowerShell command or script to execute
 
 ## Example MCP Protocol Messages
 
 ### List Available Tools
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -83,6 +90,7 @@ The Darbot.MCP server exposes the following tools to AI assistants:
 ```
 
 **Response:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -109,6 +117,7 @@ The Darbot.MCP server exposes the following tools to AI assistants:
 ```
 
 ### Execute PowerShell Command
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -124,6 +133,7 @@ The Darbot.MCP server exposes the following tools to AI assistants:
 ```
 
 **Response:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -172,6 +182,7 @@ Stop-MCPServer
 ## Troubleshooting
 
 ### Server Won't Start
+
 ```powershell
 # Check if port is already in use
 Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue
@@ -181,12 +192,14 @@ Start-MCPServer -Port 8081
 ```
 
 ### Commands Timing Out
+
 ```powershell
 # Increase timeout for long-running scripts
 Invoke-MCPScript -Script "Some-LongRunningCommand" -TimeoutSeconds 120
 ```
 
 ### Stopping the Server
+
 ```powershell
 # Always stop the server when done
 Stop-MCPServer
@@ -198,6 +211,7 @@ Get-MCPInfo
 ## Advanced Examples
 
 ### Custom Script Execution
+
 ```powershell
 # Create a custom PowerShell script
 $customScript = @"
@@ -210,6 +224,7 @@ Invoke-MCPScript -Script $customScript
 ```
 
 ### System Administration Tasks
+
 ```powershell
 # Example: System health check
 $healthCheck = @"

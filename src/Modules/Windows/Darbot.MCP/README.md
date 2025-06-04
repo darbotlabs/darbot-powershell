@@ -43,35 +43,45 @@ Stop-MCPServer
 ## Functions
 
 ### Get-MCPInfo
+
 Returns information about the current MCP environment and server status.
 
 ### Start-MCPServer
+
 Starts an HTTP server that implements the Model Context Protocol.
 
 **Parameters:**
+
 - `Port` (optional): Port number (default: 8080)
 - `AllowedOrigins` (optional): CORS allowed origins (default: "*")
 
 ### Stop-MCPServer
+
 Stops the running MCP server and cleans up resources.
 
 ### Invoke-MCPCommand
+
 Executes a PowerShell script block in the MCP context.
 
 **Parameters:**
+
 - `ScriptBlock`: The PowerShell script block to execute
 
 ### Invoke-MCPScript
+
 Executes a PowerShell script with timeout support and structured error handling.
 
 **Parameters:**
+
 - `Script`: PowerShell command or script to execute
 - `TimeoutSeconds` (optional): Execution timeout (default: 30 seconds)
 
 ### Invoke-MCPServerRequest
+
 Processes a single MCP server request (primarily for testing).
 
 **Parameters:**
+
 - `TimeoutSeconds` (optional): Request timeout (default: 10 seconds)
 
 ## MCP Protocol Support
