@@ -89,8 +89,170 @@ function Start-MCPServer {
             $listener.Prefixes.Add("http://localhost:$Port/")
             $listener.Start()
             
+            # Create background job to handle requests
+            $serverScript = {
+                param($listener, $allowedOrigins)
+                
+                function Process-MCPRequest {
+                    param($request, $response)
+                    
+                    try {
+                        # Set CORS headers
+                        $response.Headers.Add("Access-Control-Allow-Origin", "*")
+                        $response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+                        $response.Headers.Add("Access-Control-Allow-Headers", "Content-Type")
+                        
+                        if ($request.HttpMethod -eq "OPTIONS") {
+                            $response.StatusCode = 200
+                            return ""
+                        }
+                        
+                        if ($request.HttpMethod -ne "POST") {
+                            $response.StatusCode = 405
+                            return @{ error = @{ code = -32601; message = "Method not allowed" } } | ConvertTo-Json
+                        }
+                        
+                        # Read request body
+                        $reader = New-Object System.IO.StreamReader($request.InputStream)
+                        $body = $reader.ReadToEnd()
+                        $reader.Close()
+                        
+                        if ([string]::IsNullOrWhiteSpace($body)) {
+                            $response.StatusCode = 400
+                            return @{ error = @{ code = -32700; message = "Parse error" } } | ConvertTo-Json
+                        }
+                        
+                        $jsonRequest = $body | ConvertFrom-Json
+                        
+                        # Handle MCP requests
+                        switch ($jsonRequest.method) {
+                            "tools/list" {
+                                $tools = @(
+                                    @{
+                                        name = "run_powershell"
+                                        description = "Execute PowerShell commands and scripts"
+                                        inputSchema = @{
+                                            type = "object"
+                                            properties = @{
+                                                command = @{
+                                                    type = "string"
+                                                    description = "PowerShell command or script to execute"
+                                                }
+                                            }
+                                            required = @("command")
+                                        }
+                                    }
+                                )
+                                return @{
+                                    jsonrpc = "2.0"
+                                    id = $jsonRequest.id
+                                    result = @{ tools = $tools }
+                                } | ConvertTo-Json -Depth 10
+                            }
+                            
+                            "tools/call" {
+                                if ($jsonRequest.params.name -eq "run_powershell") {
+                                    $command = $jsonRequest.params.arguments.command
+                                    if ([string]::IsNullOrWhiteSpace($command)) {
+                                        $response.StatusCode = 400
+                                        return @{
+                                            jsonrpc = "2.0"
+                                            id = $jsonRequest.id
+                                            error = @{ code = -32602; message = "Invalid params: command is required" }
+                                        } | ConvertTo-Json
+                                    }
+                                    
+                                    try {
+                                        $output = Invoke-Expression $command 2>&1 | Out-String
+                                        return @{
+                                            jsonrpc = "2.0"
+                                            id = $jsonRequest.id
+                                            result = @{
+                                                content = @(
+                                                    @{
+                                                        type = "text"
+                                                        text = $output
+                                                    }
+                                                )
+                                            }
+                                        } | ConvertTo-Json -Depth 10
+                                    }
+                                    catch {
+                                        return @{
+                                            jsonrpc = "2.0"
+                                            id = $jsonRequest.id
+                                            result = @{
+                                                content = @(
+                                                    @{
+                                                        type = "text"
+                                                        text = "Error: $($_.Exception.Message)"
+                                                    }
+                                                )
+                                            }
+                                        } | ConvertTo-Json -Depth 10
+                                    }
+                                }
+                                else {
+                                    $response.StatusCode = 400
+                                    return @{
+                                        jsonrpc = "2.0"
+                                        id = $jsonRequest.id
+                                        error = @{ code = -32601; message = "Unknown tool: $($jsonRequest.params.name)" }
+                                    } | ConvertTo-Json
+                                }
+                            }
+                            
+                            default {
+                                $response.StatusCode = 400
+                                return @{
+                                    jsonrpc = "2.0"
+                                    id = $jsonRequest.id
+                                    error = @{ code = -32601; message = "Method not found" }
+                                } | ConvertTo-Json
+                            }
+                        }
+                    }
+                    catch {
+                        $response.StatusCode = 500
+                        return @{
+                            jsonrpc = "2.0"
+                            id = if ($jsonRequest.id) { $jsonRequest.id } else { $null }
+                            error = @{ code = -32603; message = "Internal error: $($_.Exception.Message)" }
+                        } | ConvertTo-Json
+                    }
+                }
+                
+                # Main server loop
+                while ($listener.IsListening) {
+                    try {
+                        $context = $listener.GetContext()
+                        $request = $context.Request
+                        $response = $context.Response
+                        
+                        $responseText = Process-MCPRequest -request $request -response $response
+                        
+                        if ($responseText) {
+                            $buffer = [System.Text.Encoding]::UTF8.GetBytes($responseText)
+                            $response.ContentLength64 = $buffer.Length
+                            $response.ContentType = "application/json"
+                            $response.OutputStream.Write($buffer, 0, $buffer.Length)
+                        }
+                        
+                        $response.OutputStream.Close()
+                    }
+                    catch {
+                        # Server stopped or error occurred
+                        break
+                    }
+                }
+            }
+            
+            # Start background job
+            $job = Start-Job -ScriptBlock $serverScript -ArgumentList $listener, $AllowedOrigins
+            
             $script:MCPServer = @{
                 Listener = $listener
+                Job = $job
                 Port = $Port
                 AllowedOrigins = $AllowedOrigins
                 IsRunning = $true
@@ -320,6 +482,12 @@ function Stop-MCPServer {
 
             try {
                 Write-Host "Stopping MCP Server..."
+            
+            # Stop the background job first
+            if ($script:MCPServer.Job) {
+                Stop-Job $script:MCPServer.Job -ErrorAction SilentlyContinue
+                Remove-Job $script:MCPServer.Job -Force -ErrorAction SilentlyContinue
+            }
             
             # Stop the server
             $script:MCPServer.IsRunning = $false
