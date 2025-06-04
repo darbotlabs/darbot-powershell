@@ -65,7 +65,7 @@ function Start-MCPServer {
         .EXAMPLE
             Start-MCPServer -Port 8080
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter()]
         [int]$Port = 8080,
@@ -75,13 +75,14 @@ function Start-MCPServer {
     )
 
     process {
-        if ($script:MCPServer) {
-            Write-Warning "MCP Server is already running on port $($script:MCPServer.Port)"
-            return
-        }
+        if ($PSCmdlet.ShouldProcess("MCP Server", "Start on port $Port")) {
+            if ($script:MCPServer) {
+                Write-Warning "MCP Server is already running on port $($script:MCPServer.Port)"
+                return
+            }
 
-        try {
-            Write-Host "Starting MCP Server on port $Port..."
+            try {
+                Write-Host "Starting MCP Server on port $Port..."
             
             # Create HTTP listener
             $listener = New-Object System.Net.HttpListener
@@ -107,6 +108,7 @@ function Start-MCPServer {
             }
             $script:MCPServer = $null
             throw
+        }
         }
     }
 }
@@ -306,17 +308,18 @@ function Stop-MCPServer {
         .EXAMPLE
             Stop-MCPServer
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param()
 
     process {
-        if (-not $script:MCPServer) {
-            Write-Warning "MCP Server is not running"
-            return
-        }
+        if ($PSCmdlet.ShouldProcess("MCP Server", "Stop")) {
+            if (-not $script:MCPServer) {
+                Write-Warning "MCP Server is not running"
+                return
+            }
 
-        try {
-            Write-Host "Stopping MCP Server..."
+            try {
+                Write-Host "Stopping MCP Server..."
             
             # Stop the server
             $script:MCPServer.IsRunning = $false
@@ -331,6 +334,7 @@ function Stop-MCPServer {
             Write-Error "Error stopping MCP Server: $_"
             $script:MCPServer = $null
             throw
+        }
         }
     }
 }
