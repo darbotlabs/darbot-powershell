@@ -1,65 +1,108 @@
-# ![logo][] PowerShell
+# ![logo][] darbot-powershell
 
-Welcome to the PowerShell GitHub Community!
-[PowerShell](https://learn.microsoft.com/powershell/scripting/overview) is a cross-platform (Windows, Linux, and macOS) automation and configuration tool/framework that works well with your existing tools and is optimized
-for dealing with structured data (e.g. JSON, CSV, XML, etc.), REST APIs, and object models.
-It includes a command-line shell, an associated scripting language, and a framework for processing cmdlets.
+Welcome to darbot-powershell - A Model Context Protocol (MCP) connector that enables AI assistants to execute PowerShell commands!
+
+**darbot-powershell** is a research fork that transforms PowerShell into a powerful MCP connector, allowing seamless integration with AI assistants like GitHub Copilot, Claude, and other MCP-compatible tools. This enables natural language control over PowerShell automation and system administration tasks.
 
 [logo]: assets/ps_black_64.svg?sanitize=true
 
-## Windows PowerShell vs. PowerShell 7+
+## 🚀 Quick Start
 
-Although this repository started as a fork of the Windows PowerShell codebase, changes made in this repository are not ported back to Windows PowerShell 5.1.
-This also means that [issues tracked here][issues] are only for PowerShell 7.x and higher.
-Windows PowerShell specific issues should be reported with the [Feedback Hub app][feedback-hub], by choosing "Apps > PowerShell" in the category.
+### Installation & Setup
 
-[issues]: https://github.com/PowerShell/PowerShell/issues
-[feedback-hub]: https://support.microsoft.com/windows/send-feedback-to-microsoft-with-the-feedback-hub-app-f59187f8-8739-22d6-ba93-f66612949332
+1. **Clone and Build**:
+```bash
+git clone https://github.com/darbotlabs/darbot-powershell.git
+cd darbot-powershell
+npm run bootstrap
+npm run build
+```
 
-## New to PowerShell?
+2. **Start MCP Server**:
+```powershell
+# Import the MCP module
+Import-Module Darbot.MCP
 
-If you are new to PowerShell and want to learn more, we recommend reviewing the [getting started][] documentation.
+# Start MCP server (default port 8080)
+Start-MCPServer
 
-[getting started]: https://learn.microsoft.com/powershell/scripting/learn/more-powershell-learning
+# Check status
+Get-MCPInfo
+# Output: MCPServerStatus: Running, MCPServerPort: 8080
+```
 
-## Get PowerShell
+3. **Connect to AI Assistants** - See configuration examples below.
 
-PowerShell is supported on Windows, macOS, and a variety of Linux platforms. For
-more information, see [Installing PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell).
+## 🤖 AI Assistant Integration
 
-## Upgrading PowerShell
+### GitHub Copilot (VS Code)
 
-For best results when upgrading, you should use the same install method you used when you first
-installed PowerShell. The update method is different for each platform and install method.
+Add to your VS Code `settings.json`:
 
-## Community Dashboard
+```json
+{
+  "github.copilot.chat.mcp.servers": {
+    "darbot-powershell": {
+      "uri": "http://localhost:8080"
+    }
+  }
+}
+```
 
-[Dashboard](https://aka.ms/PSPublicDashboard) with visualizations for community contributions and project status using PowerShell, Azure, and PowerBI.
+**Usage Examples:**
+- *"Use darbot-powershell to get system information"*
+- *"Use darbot-powershell to list top 5 processes by CPU usage"*  
+- *"Use darbot-powershell to check disk space"*
 
-For more information on how and why we built this dashboard, check out this [blog post](https://devblogs.microsoft.com/powershell/powershell-open-source-community-dashboard/).
+### Claude Desktop
 
-## Discussions
+Add to Claude's MCP configuration:
 
-[GitHub Discussions](https://docs.github.com/discussions/quickstart) is a feature to enable free and open discussions within the community
-for topics that are not related to code, unlike issues.
+```json
+{
+  "mcp": {
+    "servers": {
+      "darbot-powershell": {
+        "command": "powershell",
+        "args": ["-Command", "Import-Module Darbot.MCP; Start-MCPServer -Port 8080"]
+      }
+    }
+  }
+}
+```
 
-This is an experiment we are trying in our repositories, to see if it helps move discussions out of issues so that issues remain actionable by the team or members of the community.
-There should be no expectation that PowerShell team members are regular participants in these discussions.
-Individual PowerShell team members may choose to participate in discussions, but the expectation is that community members help drive discussions so that team members
-can focus on issues.
+### Power Platform & Copilot Studio
 
-Create or join a [discussion](https://github.com/PowerShell/PowerShell/discussions).
+Configure as a custom connector:
+1. Create new custom connector in Power Platform
+2. Set endpoint URL: `http://localhost:8080` (or your server URL)
+3. Configure MCP protocol for actions
+4. Use in Power Apps and Copilot Studio flows
 
-## Chat
+## 🔧 Available MCP Commands
 
-Want to chat with other members of the PowerShell community?
+| Command | Description |
+|---------|-------------|
+| `Start-MCPServer` | Start MCP server on specified port |
+| `Stop-MCPServer` | Stop running MCP server |
+| `Get-MCPInfo` | Show server status and system information |
+| `Invoke-MCPScript` | Execute PowerShell with timeout/error handling |
+| `Invoke-MCPServerRequest` | Process MCP requests (for testing) |
 
-There are dozens of topic-specific channels on our community-driven PowerShell Virtual User Group, which you can join on:
+## 📖 Documentation & Examples
 
-* [Gitter](https://gitter.im/PowerShell/PowerShell)
-* [Discord](https://discord.gg/PowerShell)
-* [IRC](https://web.libera.chat/#powershell) on Libera.Chat
-* [Slack](https://aka.ms/psslack)
+- **[Complete MCP Usage Guide](Examples/MCP-Usage.md)** - Detailed examples and configuration
+- **[MCP Project Plan](MCP_NLWeb_Project_Plan.md)** - Development roadmap and technical details
+- **[Automation Guide](docs/darbot/AUTOMATION_GUIDE.md)** - Development workflows
+
+## 🌟 Key Features
+
+- **🌐 HTTP MCP Server**: Local server implementing MCP JSON-RPC 2.0 protocol
+- **🔧 PowerShell Execution**: Run PowerShell commands remotely via AI assistants  
+- **🛡️ Security**: Localhost-only connections, respects PowerShell execution policies
+- **📊 Structured Responses**: JSON-formatted output with error handling
+- **⚡ Real-time Processing**: Asynchronous request handling with timeout support
+- **🤝 Multi-Platform**: Windows, macOS, and Linux support
 
 ### Build status of nightly builds
 
@@ -76,17 +119,17 @@ There are dozens of topic-specific channels on our community-driven PowerShell V
 [cf-site]: https://www.codefactor.io/repository/github/powershell/powershell
 [cf-image]: https://www.codefactor.io/repository/github/powershell/powershell/badge
 
-## 🚀 Automation & Development
+## 🔧 Development & Build Commands
 
 This repository includes comprehensive automation for development workflows:
 
-### Quick Start
+### Quick Start Commands
 
 ```bash
 # Bootstrap the environment
 npm run bootstrap
 
-# Build PowerShell
+# Build darbot-powershell
 npm run build
 
 # Run tests
@@ -104,73 +147,9 @@ npm run lint
 - **npm scripts** for consistent build commands
 - **Enhanced issue/PR templates** for better collaboration
 
-📖 **[Full Automation Guide](docs/darbot/AUTOMATION_GUIDE.md)** - Complete setup and usage documentation
+## 🤖 Example MCP Protocol Messages
 
-## 🤖 Model Context Protocol (MCP) Integration
-
-PowerShell now includes comprehensive **Model Context Protocol (MCP)** support, enabling seamless integration with AI assistants like GitHub Copilot, Claude, and other MCP-compatible tools.
-
-### Key Features
-
-- **🌐 HTTP MCP Server**: Local server implementing MCP JSON-RPC 2.0 protocol
-- **🔧 PowerShell Execution**: Run PowerShell commands remotely via AI assistants  
-- **🛡️ Security**: Localhost-only connections, respects PowerShell execution policies
-- **📊 Structured Responses**: JSON-formatted output with error handling
-- **⚡ Real-time Processing**: Asynchronous request handling with timeout support
-
-### Quick Start
-
-```powershell
-# Import the MCP module
-Import-Module Darbot.MCP
-
-# Start MCP server (default port 8080)
-Start-MCPServer
-
-# Check server status
-Get-MCPInfo
-# Output: MCPServerStatus: Running, MCPServerPort: 8080
-
-# Execute PowerShell remotely
-Invoke-MCPScript -Script "Get-Process | Select-Object -First 5"
-
-# Stop server when done
-Stop-MCPServer
-```
-
-### GitHub Copilot Integration
-
-Configure VS Code to use PowerShell via MCP by adding to your settings:
-
-```json
-{
-  "github.copilot.chat.mcp.servers": {
-    "darbot-powershell": {
-      "uri": "http://localhost:8080"
-    }
-  }
-}
-```
-
-Then use natural language commands:
-
-- *"Use darbot-powershell to get system information"*
-- *"Use darbot-powershell to list top 5 processes by CPU usage"*  
-- *"Use darbot-powershell to check disk space"*
-
-### Available Cmdlets
-
-| Cmdlet | Description |
-|--------|-------------|
-| `Start-MCPServer` | Starts MCP server on specified port |
-| `Stop-MCPServer` | Stops running MCP server |
-| `Get-MCPInfo` | Shows server status and system information |
-| `Invoke-MCPScript` | Executes PowerShell with timeout/error handling |
-| `Invoke-MCPServerRequest` | Processes MCP requests (for testing) |
-
-### Example MCP Protocol Messages
-
-**Tools List Request:**
+### Tools List Request:
 
 ```json
 {
@@ -180,7 +159,7 @@ Then use natural language commands:
 }
 ```
 
-**PowerShell Execution Request:**
+### PowerShell Execution Request:
 
 ```json
 {
@@ -196,71 +175,54 @@ Then use natural language commands:
 }
 ```
 
-📖 **[MCP Usage Examples](Examples/MCP-Usage.md)** - Complete usage guide and examples
+## 🛡️ Security Considerations
 
-## Developing and Contributing
+- MCP server runs locally and only accepts localhost connections
+- PowerShell execution respects current user permissions and execution policies
+- No authentication required - designed for local development use
+- Consider restricted execution policies in production environments
 
-Want to contribute to PowerShell? Please start with the [Contribution Guide][] to learn how to develop and contribute.
-
-If you are developing .NET Core C# applications targeting PowerShell Core, [check out our FAQ][] to learn more about the PowerShell SDK NuGet package.
-
-Also, make sure to check out our [PowerShell-RFC repository](https://github.com/powershell/powershell-rfc) for request-for-comments (RFC) documents to submit and give comments on proposed and future designs.
-
-[Contribution Guide]: .github/CONTRIBUTING.md
-[check out our FAQ]: docs/FAQ.md#where-do-i-get-the-powershell-core-sdk-package
-
-## Building PowerShell
+## 🏗️ Building darbot-powershell
 
 | Linux                    | Windows                    | macOS                   |
 |--------------------------|----------------------------|------------------------|
 | [Instructions][bd-linux] | [Instructions][bd-windows] | [Instructions][bd-macOS] |
 
-If you have any problems building PowerShell, please start by consulting the developer [FAQ].
+If you have any problems building, please check the developer [FAQ].
 
 [bd-linux]: docs/building/linux.md
 [bd-windows]: docs/building/windows-core.md
 [bd-macOS]: docs/building/macos.md
 [FAQ]: docs/FAQ.md
 
-## Downloading the Source Code
+## 📥 Getting the Source Code
 
 You can clone the repository:
 
 ```sh
-git clone https://github.com/PowerShell/PowerShell.git
+git clone https://github.com/darbotlabs/darbot-powershell.git
 ```
 
-For more information, see [working with the PowerShell repository](https://github.com/PowerShell/PowerShell/tree/master/docs/git).
+For more information, see [working with the darbot-powershell repository](https://github.com/darbotlabs/darbot-powershell/tree/master/docs/git).
 
-## Support
+## 💡 Contributing & Support
+
+Want to contribute to darbot-powershell? Please start with the [Contribution Guide][] to learn how to develop and contribute.
 
 For support, see the [Support Section][].
 
-[Support Section]: https://github.com/PowerShell/PowerShell/tree/master/.github/SUPPORT.md
+[Contribution Guide]: .github/CONTRIBUTING.md
+[Support Section]: https://github.com/darbotlabs/darbot-powershell/tree/master/.github/SUPPORT.md
 
-## Legal and Licensing
+## 📄 Legal and Licensing
 
-PowerShell is licensed under the [MIT license][].
+darbot-powershell is licensed under the [MIT license][].
 
-[MIT license]: https://github.com/PowerShell/PowerShell/tree/master/LICENSE.txt
+[MIT license]: https://github.com/darbotlabs/darbot-powershell/tree/master/LICENSE.txt
 
-### Docker Containers
+## 🏛️ Governance
 
-> [!Important]
-> The PowerShell container images are now [maintained by the .NET team](https://github.com/PowerShell/Announcements/issues/75). The containers at `mcr.microsoft.com/powershell` are currently not maintained.
-
-License: By requesting and using the Container OS Image for Windows containers, you acknowledge, understand, and consent to the Supplemental License Terms available on [Microsoft Artifact Registry][mcr].
-
-[mcr]: https://mcr.microsoft.com/en-us/product/powershell/tags
-
-### Telemetry
-
-Please visit our [about_Telemetry](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_telemetry)
-topic to read details about telemetry gathered by PowerShell.
-
-## Governance
-
-The governance policy for the PowerShell project is described the [PowerShell Governance][gov] document.
+The governance policy for the darbot-powershell project follows the original [PowerShell Governance][gov] model with adaptations for the research fork.
 
 [gov]: https://github.com/PowerShell/PowerShell/blob/master/docs/community/governance.md
 
@@ -271,3 +233,7 @@ Please see our [Code of Conduct](CODE_OF_CONDUCT.md) before participating in thi
 ## [Security Policy](.github/SECURITY.md)
 
 For any security issues, please see our [Security Policy](.github/SECURITY.md).
+
+---
+
+**darbot-powershell** - Empowering AI assistants with full PowerShell capabilities through the Model Context Protocol. 🚀🤖

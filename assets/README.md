@@ -1,6 +1,6 @@
 # Use of Trademarked Logos
 
-The assets in this folder are trademarked by Microsoft and don't fall under the same [License](https://raw.githubusercontent.com/PowerShell/PowerShell/master/LICENSE.txt) as the source code.
+The assets in this folder are trademarked by Microsoft and don't fall under the same [License](https://raw.githubusercontent.com/darbotlabs/darbot-powershell/master/LICENSE.txt) as the source code.
 
 ## Permitted Uses
 
