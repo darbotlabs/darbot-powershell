@@ -131,6 +131,7 @@ Configure as a custom connector:
 
 - **[📦 Installation Guide](INSTALL.md)** - Complete setup and installation instructions
 - **[🤖 AI Integration Guide](docs/AI_INTEGRATION_GUIDE.md)** - Copy-paste configurations for all major AI assistants
+- **[✅ Verification Guide](VERIFICATION.md)** - Test and verify your MCP integration
 - **[📚 MCP Usage Examples](Examples/MCP-Usage.md)** - Detailed examples and advanced usage
 - **[🛠️ MCP Project Plan](MCP_NLWeb_Project_Plan.md)** - Development roadmap and technical details
 - **[⚙️ Development Guide](docs/darbot/AUTOMATION_GUIDE.md)** - Build and development workflows
