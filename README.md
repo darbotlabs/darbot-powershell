@@ -8,30 +8,68 @@ Welcome to darbot-powershell - A Model Context Protocol (MCP) connector that ena
 
 ## 🚀 Quick Start
 
-### Installation & Setup
+### One-Click Setup
 
-1. **Clone and Build**:
+**Linux/macOS**:
 ```bash
 git clone https://github.com/darbotlabs/darbot-powershell.git
 cd darbot-powershell
-npm run bootstrap
-npm run build
+./setup.sh
 ```
 
-2. **Start MCP Server**:
-```powershell
-# Import the MCP module
-Import-Module Darbot.MCP
-
-# Start MCP server (default port 8080)
-Start-MCPServer
-
-# Check status
-Get-MCPInfo
-# Output: MCPServerStatus: Running, MCPServerPort: 8080
+**Windows**:
+```cmd
+git clone https://github.com/darbotlabs/darbot-powershell.git
+cd darbot-powershell
+setup.cmd
 ```
 
-3. **Connect to AI Assistants** - See configuration examples below.
+### Manual Setup
+
+```bash
+# Clone, build, and start MCP server
+git clone https://github.com/darbotlabs/darbot-powershell.git
+cd darbot-powershell && npm run bootstrap && npm run build
+pwsh -c "Import-Module ./src/Modules/Unix/Darbot.MCP; Start-MCPServer"
+# ✅ Server running on http://localhost:8080
+```
+
+### Connect to AI Assistants
+
+**GitHub Copilot (VS Code)**:
+```json
+{
+  "github.copilot.chat.mcp.servers": {
+    "darbot-powershell": {
+      "uri": "http://localhost:8080"
+    }
+  }
+}
+```
+
+**Claude Desktop**:
+```json
+{
+  "mcp": {
+    "servers": {
+      "darbot-powershell": {
+        "uri": "http://localhost:8080"
+      }
+    }
+  }
+}
+```
+
+### Try It Out
+
+In your AI assistant, try:
+- *"Use darbot-powershell to get system information"*
+- *"Use darbot-powershell to list running processes"*
+- *"Use darbot-powershell to check disk space"*
+
+📖 **[Full Installation Guide](INSTALL.md)** • **[All AI Configurations](docs/AI_INTEGRATION_GUIDE.md)**
+
+---
 
 ## 🤖 AI Assistant Integration
 
@@ -91,9 +129,11 @@ Configure as a custom connector:
 
 ## 📖 Documentation & Examples
 
-- **[Complete MCP Usage Guide](Examples/MCP-Usage.md)** - Detailed examples and configuration
-- **[MCP Project Plan](MCP_NLWeb_Project_Plan.md)** - Development roadmap and technical details
-- **[Automation Guide](docs/darbot/AUTOMATION_GUIDE.md)** - Development workflows
+- **[📦 Installation Guide](INSTALL.md)** - Complete setup and installation instructions
+- **[🤖 AI Integration Guide](docs/AI_INTEGRATION_GUIDE.md)** - Copy-paste configurations for all major AI assistants
+- **[📚 MCP Usage Examples](Examples/MCP-Usage.md)** - Detailed examples and advanced usage
+- **[🛠️ MCP Project Plan](MCP_NLWeb_Project_Plan.md)** - Development roadmap and technical details
+- **[⚙️ Development Guide](docs/darbot/AUTOMATION_GUIDE.md)** - Build and development workflows
 
 ## 🌟 Key Features
 

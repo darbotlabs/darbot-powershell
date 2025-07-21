@@ -48,6 +48,9 @@ dotnet-uninstall-debian-packages.sh
 *.tar.gz
 *.zip
 *.rpm
+
+# MCP setup generated configs
+mcp-configs/
 *.pkg
 *.nupkg
 *.AppImage
