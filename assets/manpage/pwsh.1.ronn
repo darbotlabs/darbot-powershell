@@ -223,7 +223,7 @@ These are automatically defined PowerShell-language variables.
 ## SEE ALSO
 
 * https://microsoft.com/powershell
-* https://github.com/PowerShell/PowerShell
+* https://github.com/darbotlabs/darbot-powershell
 
 ## COPYRIGHT
 
