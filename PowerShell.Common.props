@@ -18,9 +18,13 @@
     <Exec Command='git describe --abbrev=60 --long'
           WorkingDirectory="$(MSBuildProjectDirectory)"
           ConsoleToMSBuild="true"
+          IgnoreExitCode="true"
           StandardOutputImportance="Low">
       <Output TaskParameter="ConsoleOutput" PropertyName="PowerShellVersion" />
     </Exec>
+    <PropertyGroup Condition="'$(PowerShellVersion)' == ''">
+      <PowerShellVersion>v7.6.0-preview.4-0-g0000000</PowerShellVersion>
+    </PropertyGroup>
 
     <PropertyGroup Condition = "'$(ReleaseTag)' != ''">
       <!--
